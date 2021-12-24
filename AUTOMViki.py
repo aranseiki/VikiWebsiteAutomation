@@ -1,19 +1,18 @@
-from platform import platform
+
 from selenium import webdriver
 from selenium.webdriver import Firefox
 from time import sleep
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.expected_conditions import ( presence_of_element_located)
+from selenium.webdriver.support import expected_conditions as EC
+import csv
 
 navegador = Firefox()
 url = "https://www.viki.com/"
 navegador.get(url)
 
 sleep(0.5)
-loginPage = navegador.find_element_by_css_selector('li>a[href="/sign_in"]')
+loginPage = navegador.find_element_by_css_selector('li.hide-on-small:nth-child(4) > a:nth-child(1)')
 loginPage.click()
 sleep(0.5)
 username = navegador.find_element_by_css_selector('input[type="email"]')
@@ -26,39 +25,69 @@ loginButton = navegador.find_element_by_tag_name('form > button')
 loginButton.click()
 
 sleep(10)
-enterMenuPerfil = navegador.find_element_by_css_selector('[class="circle va-top"]')
-enterMenuPerfil.click()
-sleep(0.5)
-enterPerfil = navegador.find_element_by_css_selector('[href="/users/techall_399"]')
-enterPerfil.click()
-sleep(5)
-paginaSeguindo = navegador.find_element_by_css_selector('[class="section block-display"]')
-paginaSeguindo.click()
-
-sleep(5)
-openDrama = navegador.find_element_by_css_selector('[href="/tv/35883c-legend-of-yun-xi"]')
-openDrama.click()
+explore_link = navegador.find_element_by_css_selector('span[data-tracking-id="header_explore"]')
+explore_link.click()
 
 sleep(2)
-listaAllEpisodios = navegador.find_element_by_css_selector('[class="sc-kEYyzF cyOvgX btn sc-1ae9vu4-0 hSXBky"]')
-listaAllEpisodios.click()
+link_all_shows = navegador.find_element_by_css_selector('a[href="/explore"]')
+link_all_shows.click()
 
-def esperar_elemento(webdriver):
-    elemento_esperar = webdriver.find_element_by_css_selector('[class="vjs-big-play-button"]')
-    return bool (elemento_esperar)
+sleep(2)
+select_box_formats = navegador.find_element_by_css_selector('div#s2id_type > a > span.select2-arrow > b')
+select_box_formats.click()
 
-esperarAte = WebDriverWait(navegador, 10)
-esperarAte.until (esperar_elemento, 'Tente novamente mais tarde...')
+sleep(2)
+select_box_option_tv = navegador.find_element_by_css_selector('div#select2-drop > ul[role="listbox"] > li:nth-child(2)')
+select_box_option_tv.click()
 
-playNoVideo = navegador.find_element_by_css_selector('[class="vjs-big-play-button"]')
-playNoVideo.click()
+sleep(2)
+select_box_countries = navegador.find_element_by_css_selector('div#s2id_country > a > span.select2-arrow > b')
+select_box_countries.click()
 
-def tela_cheia(botao_de_tela_cheia):
-    elemento_tela_cheia = botao_de_tela_cheia.find_element_by_css_selector('[class="vjs-big-play-button"]')
-    return bool (elemento_tela_cheia)
+sleep(2)
+wait = WebDriverWait(navegador, 10)
+select_box_option_korea = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div#select2-drop > ul > li[role="presentation"] > ul.select2-result-sub > li[role="presentation"]:nth-child(2)  > div[class="select2-result-label"]')))
+select_box_option_korea.click()
 
-fullScreen = WebDriverWait(navegador, 5, poll_frequency=0.1)
-fullScreen.until (tela_cheia, 'Tente novamente mais tarde...')
+sleep(2)
+wait = WebDriverWait(navegador, 10)
+link_sort_by = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.explore-sort-items > div > a > span:nth-child(2) > i')))
+link_sort_by.click()
 
-fullScreen = navegador.find_element_by_css_selector('[class="vjs-big-play-button"]')
-navegador.fullscreen_window()
+sleep(2)
+wait = WebDriverWait(navegador, 10)
+link_sort_by_option_all_time = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.explore-sort-items > div > ul > li:nth-child(1) > a')) and EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.explore-sort-items > div > ul > li:nth-child(1) > a')))
+link_sort_by_option_all_time.click()
+
+sleep(2)
+link_next_page = navegador.find_element_by_css_selector('div.pagination > a[rel="next"]')
+
+
+list_all_titles_movies_saved = []
+number_page = 1
+current_page = f'The current page is: ', number_page
+print(current_page)
+
+while link_next_page: 
+    wait = WebDriverWait(navegador, 10)
+    list_all_titles_movies = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.row-inline > div.thumbnail > div.thumbnail-description > div > a')))
+    for i in list_all_titles_movies:
+        list_all_titles_movies_saved.append(i.text)
+    locator = (By.CSS_SELECTOR, 'div.pagination > a[rel="next"]')
+    sleep(10)
+    wait.until(EC.presence_of_element_located(locator) and EC.element_to_be_clickable(locator))
+    link_next_page = navegador.find_element_by_css_selector('div.pagination > a[rel="next"]')
+    link_next_page.click()
+    sleep(6)
+    number_page = number_page + 1
+    current_page = f'The current page is: ', number_page
+    print(current_page)
+    wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, 'div.pagination > a[rel="next"]')), 'Elemento não encontrado! ')
+    link_next_page = navegador.find_element_by_css_selector('div.pagination > a[rel="next"]')
+    
+
+print(list_all_titles_movies_saved)
+with open('data.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(list_all_titles_movies_saved)
+w
