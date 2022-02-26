@@ -90,4 +90,3 @@ print(list_all_titles_movies_saved)
 with open('data.csv', 'w') as f:
     writer = csv.writer(f)
     writer.writerow(list_all_titles_movies_saved)
-w
