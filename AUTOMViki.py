@@ -172,3 +172,5 @@ custom.save_csv('data.csv', 'w', ["Nome da série"])
 
 # EXPORTA A LISTA DE SÉRIES PARA O ARQUIVO .CSV
 custom.save_csv('data.csv', 'a', custom.serie_list_handling(list_all_titles_movies_saved))
+
+selenium.stop_browser()
