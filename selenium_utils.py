@@ -6,97 +6,97 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
 
 
-navegador = ''
+browser = ''
 
 
-def iniciar_navegador(url):
-    global navegador
-    navegador = Firefox()
-    navegador.get(url)
-    aguardar_pagina_carregar()
+def start_browser(url):
+    global browser
+    browser = Firefox()
+    browser.get(url)
+    wait_page_loaded()
 
 
-def aguardar_pagina_carregar():
-    estado_pronto = False
-    while estado_pronto == False:
-        estado = navegador.execute_script(
+def wait_page_loaded():
+    done_state = False
+    while done_state == False:
+        state = browser.execute_script(
             'return window.document.readyState'
         )
-        if estado != 'complete':
+        if state != 'complete':
             sleep(1)
         else:
-            estado_pronto = True
+            done_state = True
 
 
-def voltar_pagina():
-    navegador.back()
-    aguardar_pagina_carregar()
+def back_page():
+    browser.back()
+    wait_page_loaded()
 
 
-def centralizar_elemento(seletor):
-    navegador.execute_script(
-        'document.querySelector("' + seletor
+def center_element(selector):
+    browser.execute_script(
+        'document.querySelector("' + selector
         + '").scrollIntoView({block: "center"})'
     )
 
 
-def aguardar_elemento(seletor, tempo=30):
+def wait_element(selector, time=30):
     try:
-        wait = WebDriverWait(navegador, tempo)
+        wait = WebDriverWait(browser, time)
         sleep(0.5)
         wait.until(EC.visibility_of_element_located((
-                By.CSS_SELECTOR, seletor)
+                By.CSS_SELECTOR, selector)
             ))
-        centralizar_elemento(seletor)
-        aguardar_pagina_carregar()
+        center_element(selector)
+        wait_page_loaded()
     except:
         ...
 
 
-def encontrar_elemento(seletor):
-    navegador.find_element(By.CSS_SELECTOR, seletor)
-    centralizar_elemento(seletor)
+def find_very_elements(selector):
+    browser.find_elements(By.CSS_SELECTOR, selector)
+    center_element(selector)
 
 
-def encontrar_varios_elementos(seletor):
-    navegador.find_elements(By.CSS_SELECTOR, seletor)
-    centralizar_elemento(seletor)
+def find_element(selector):
+    browser.find_elements(By.CSS_SELECTOR, selector)
+    center_element(selector)
 
 
-def contar_elementos(seletor):
-    elementos = navegador.find_elements(By.CSS_SELECTOR, seletor)
-    centralizar_elemento(seletor)
-    return elementos.__len__()
+def counter_elements(selector):
+    elements = browser.find_elements(By.CSS_SELECTOR, selector)
+    center_element(selector)
+    return elements.__len__()
 
 
-def extrair_texto(seletor):
-    elemento = navegador.find_element(By.CSS_SELECTOR, seletor)
-    texto_elemento = elemento.text
-    centralizar_elemento(seletor)
-    return texto_elemento
+def extract_text(selector):
+    element = browser.find_element(By.CSS_SELECTOR, selector)
+    text_element = element.text
+    center_element(selector)
+    return text_element
 
 
-def clicar_elemento(seletor):
+def click_element(selector):
     try:
-        centralizar_elemento(seletor)
-        elemento = navegador.find_element(By.CSS_SELECTOR, seletor)
-        elemento.click()
-        aguardar_pagina_carregar()
+        center_element(selector)
+        element = browser.find_element(By.CSS_SELECTOR, selector)
+        element.click()
+        wait_page_loaded()
     except:
         ...
 
 
-def escrever_no_elemento(seletor, texto):
-    centralizar_elemento(seletor)
-    elemento = navegador.find_element(By.CSS_SELECTOR, seletor)
-    elemento.send_keys(texto)
-    aguardar_pagina_carregar()
+def write_in_element(selector, text):
+    center_element(selector)
+    element = browser.find_element(By.CSS_SELECTOR, selector)
+    element.send_keys(text)
+    wait_page_loaded()
 
 
-def clique_mouse(webelemento):
-    action = ActionChains(navegador)
-    action.double_click(webelemento).perform()
+def mouse_click(webelement):
+    action = ActionChains(browser)
+    action.double_click(webelement).perform()
 
 
-def encerrar_navegador():
-    navegador.close()
+def stop_browser():
+    browser.close()

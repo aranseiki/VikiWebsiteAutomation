@@ -12,18 +12,18 @@ def cls():
     os.system('cls')
 
 
-def criar_diretorio(caminho):
+def create_directory(caminho):
     if not os.path.exists(caminho):
         os.mkdir(caminho)
 
 
-def salvar_csv(arquivo, modo, conteudo):
+def save_csv(arquivo, modo, conteudo):
     arquivo_manipulado = open(arquivo, modo, encoding='utf8')
     escreva = csv.writer(arquivo_manipulado)
     escreva.writerow(conteudo)
 
 
-def tratar_anexo(conteudo_anexo):
+def handling_attachment(conteudo_anexo):
     conteudo_anexo = str(
         conteudo_anexo
     ).replace('[', '').replace('\\n', ' ')\
@@ -33,7 +33,7 @@ def tratar_anexo(conteudo_anexo):
     return conteudo_anexo
 
 
-def enviar_email_outlook(endereco_de, senha, endereco_para, mensagem):
+def send_email_outlook(endereco_de, senha, endereco_para, mensagem):
     login = endereco_de.split('<')[1].replace('>', '')
     servidor = smtplib.SMTP('smtp.office365.com')
     servidor.connect("smtp.office365.com", 587)
@@ -45,3 +45,24 @@ def enviar_email_outlook(endereco_de, senha, endereco_para, mensagem):
     servidor.sendmail(endereco_de, endereco_para, mensagem)
     servidor.quit()
 
+
+def serie_list_handling(list_param):
+    return str(list_param)\
+        .replace("', \'", ', ')\
+        .replace('\\r\\n,', '\r\n')\
+        .replace('\r', "', '")\
+        .replace('\\r', "', '")\
+        .replace('\n', "', '")\
+        .replace('\\n', "', '")\
+        .replace("']", '')\
+        .replace('"]', "")\
+        .replace('"', "'")\
+        .replace('"', "")\
+        .replace('""', "")\
+        .replace("''", "")\
+        .replace("', , '", "', '")\
+        .replace("' ", "'")\
+        .replace(", ,", "")\
+        .replace("' ,", "',")\
+        .replace("', '", ";")\
+        .split('\r\n')
