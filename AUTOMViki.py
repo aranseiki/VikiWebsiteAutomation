@@ -6,7 +6,7 @@ import csv
 # INICIALIZA A AUTOMAÇÃO
 url = "https://www.viki.com/"
 selenium.start_browser(url)
-
+a
 # ENTRA NA PÁGINA DE LOGIN
 selector = 'li.hide-on-small:nth-child(4) > a:nth-child(1)'
 selenium.find_element(selector)
