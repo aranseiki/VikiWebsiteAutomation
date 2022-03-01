@@ -3,174 +3,181 @@ import selenium_utils as selenium
 import python_functions_utils as custom
 import csv
 
-# INICIALIZA A AUTOMAÇÃO
+# OPEN THE BROWSE WITH A URL
 url = "https://www.viki.com/"
 selenium.start_browser(url)
-a
-# ENTRA NA PÁGINA DE LOGIN
+
+# ACCESS THE LOGIN PAGE
 selector = 'li.hide-on-small:nth-child(4) > a:nth-child(1)'
 selenium.find_element(selector)
 selenium.click_element(selector)
 
-# INSERE O E-MAIL
+# INSERT THE E-MAIL
 selector = "input[type="+"email"+"]"
 selenium.find_element(selector)
 selenium.write_in_element(selector, input('Type your e-mail: '))
 
-# INSERE A SENHA
+# INSERT THE PASSWORD
 selector = "input[type="+"password"+"]"
 selenium.find_element(selector)
 selenium.write_in_element(selector, input('Type your password: '))
 
-# LIMPA O TERMINAL POR SEGURANÇA
+# CLEAR THE TERMINAL FOR SECURITY
 custom.cls()
 
-# CLICA NO BOTÃO "LOGIN" PARA FAZER O LOGON
+# CLICK ON THE "LOGIN" BUTTON
 selector = 'form > button'
 selenium.find_element(selector)
 selenium.click_element(selector)
 
-# CLICA NO LINK EXPLORAR NO MENU HORIZONTAL SUPERIOR
+# CLICK IN "EXPLORER" LINK ON TOP OF MENU HORIZONTAL
 selector = "a[href="+"'/explore'"+"]"
 selenium.wait_element(selector)
 selenium.find_element(selector)
 selenium.click_element(selector)
 
-# EXIBE TODOS OS FORMATOS DE SÉRIES
+# SHOW ALL TV SERIES FORMATS
 selector = 'div#s2id_type > a > span.select2-arrow > b'
 selenium.find_element(selector)
 selenium.click_element(selector)
 
-# DEFINE O FORMATO DA SÉRIE COMO "TV"
+# DEFINE "TV" OPTION AS SERIE FORMAT SELECTIONED
 selector = "div#select2-drop > ul[role="+"listbox"+"] > li:nth-child(2)"
 selenium.find_element(selector)
 selenium.click_element(selector)
 
+# INITIALIZE THE VARIABLES FOR LOGIC
 current_country_selection = ''
 tentatives = 1
 while tentatives <= 5:
-    # EXIBE TODOS OS OS PAÍSES DE ORIGEM
+    # SHOW ALL ORIGIN'S COUNTRY OPTIONS
     selector = 'div#s2id_country > a > span.select2-arrow > b'
     selenium.find_element(selector)
     selenium.click_element(selector)
 
-    # DEFINE O PÁIS DE ORIGEM COMO COREA
+    # DEFINE THE COUNTRY OPTION AS KOREA
     selector = "div#select2-drop > ul > li[role="+"presentation"+"] > ul.select2-result-sub > li[role="+"presentation"+"]:nth-child(2)  > div[class="+"select2-result-label"+"]"
     selenium.wait_element(selector)
     selenium.find_element(selector)
     selenium.click_element(selector)
     sleep(1)
 
-    # COLETA A REGIÃO SELECIONADA
+    # STORE THE SELECTIONED REGION
     selector = "div#s2id_country > a[class="+"select2-choice"+"] > span[class="+"select2-chosen"+"]"
     current_country_selection = selenium.extract_text(selector)
+    
+    # CONDITION FOR THE LOOP'S LOGIC
     tentatives = tentatives + 1
     
-    # SE A REGIÃO SELECIONADA CORRESPONDER COM O SOLICITADO
+    # IF THE SELECTIONED REGION MATCH WITH THE OPTION REQUESTED
     if current_country_selection == 'Korea':
-        # SAI DO LOOP
+        # EXIT OF THE LOOP
         break
-    # SE A REGIÃO SELECIONADA NÃO CORRESPONDER COM O SOLICITADO
+    # IF THE SELECTIONED REGION NOT MATCH WITH THE OPTION REQUESTED
     else:
-        # AGUARDA 1 SEGUNDO
+        # WAIT 1 SECOUND
         sleep(1)
 
 current_country_selection = ''
 tentatives = 1
 while tentatives <= 5:
-    # EXIBE TODAS AS OPÇÕES DE ORDEM DAS SÉRIES
+    # SHOW ALL SERIES ORDER OPTIONS
     selector = 'div.explore-sort-items > div > a > span:nth-child(2) > i'
     selenium.wait_element(selector)
     selenium.find_element(selector)
     selenium.click_element(selector)
     
-    # DEFINE A ORDEM DE EXIBIÇÃO COMO "POPULAR-ALL TIME"
+    # DEFINE THE SELECTIONED SERIES ORDER AS "POPULAR-ALL TIME"
     selector = 'div.explore-sort-items > div > ul > li:nth-child(1) > a'
     selenium.wait_element(selector)
     selenium.find_element(selector)
     selenium.click_element(selector)
     sleep(2)
 
-    # COLETA A ORDEM DE EXIBIÇÃO SELECIONADA
+    # STORE THE SELECTIONED SERIES ORDER
     selector = "div.explore-sort-items > div > a > span:nth-child(2)"
     current_order_selection = selenium.extract_text(selector)
     
-    # SE A ORDEM DE EXIBIÇÃO SELECIONADA CORRESPONDER COM O SOLICITADO
+    # CONDITION FOR THE LOOP'S LOGIC
+    tentatives = tentatives + 1
+    
+    # IF THE SELECTIONED SERIES ORDER MATCH WITH THE OPTION REQUESTED
     if current_order_selection.__contains__('Popular - All Time'):
-        # SAI DO LOOP
+        # EXIT OF THE LOOP
         break
-    # SE A ORDEM DE EXIBIÇÃO SELECIONADA NÃO CORRESPONDER COM O SOLICITADO
+    # IF THE SELECTIONED SERIES ORDER NOT MATCH WITH THE OPTION REQUESTED
     else:
-        # AGUARDA 1 SEGUNDO
+        # WAIT 1 SECOUND
         sleep(1)
 
-# INICIALIZA VALORES PARA A CONDIÇÃO DO WHILE
+# INITIALIZE VALUES FOR THE WHILE-LOOP'S CONDITIONS
 list_all_titles_movies_saved = []
 link_next_page = True
 
-# PARA CADA PÁGINA QUE CONTÉM A LISTA DE SÉRIES:
+# FOR EACH PAGE THAT CONTAINS THE SERIES LIST
 while link_next_page == True:
     try:
-        # GARANTE QUE EXISTE A PRIMEIRA SÉRIE DA LISTA DISPONÍVEL NA PÁGINA
+        # ASSERT THAT EXISTS THE FIRST SERIE IN THE AVALIABLE ON PAGE
         selector = 'div.row-inline > div.thumbnail:nth-child(1)'
         selenium.wait_element(selector)
-        # DEFINE wait_element COMO True PARA VALIDAÇÃO POSTERIOR
+        # DEFINE wait_element AS True FOR POSTERIOR AVALIATION
         wait_element = True
     except:
-        # DEFINE wait_element COMO False PARA VALIDAÇÃO POSTERIOR
+        # DEFINE wait_element AS False FOR POSTERIOR AVALIATION
         wait_element = False
     
-    # CASO wait_element SEJA FALSO
+    # IF wait_element BE False
     if (wait_element == False):
-        # ENCERRA A EXECUÇÃO DO LOOP
+        # EXIT THE LOOP EXECUTION
         break
 
-    # INICIALIZA VALORES PARA A CONDIÇÃO DO WHILE
+    # INITIALIZE VALUES FOR THE WHILE-LOOP'S CONDITION
     counter_current = 1
     
-    # AGUARDA O ELEMENTO GERAL DAS LISTAS FICAR DISPONÍVEL NA TELA
+    # WAIT THE GENERAL ELEMENT OF ELEMENT'S LIST TO BE AVALIABLE IN THE SCREEN
     selector = 'div.row-inline > div.thumbnail'
     selenium.wait_element(selector)
 
-    # COLETA A QUANTIDADE DE SÉRIES QUE EXISTE VISÍVEL NA PÁGINA
+    # STORE THE LENGTH OF SERIES AVALIABLES IN THE PAGE
     counter_series = selenium.counter_elements(selector)
 
-    # PARA CADA SÉRIE DA PÁGINA
+    # FOR EACH SERIE IN THE PAGE
     while counter_current <= counter_series:
-        # DEFINE O CAMINHO LÓGICO DA SÉRIE
+        # DEFINE THE LOGIC LOCAL OF THE SERIE
         selector = "div.row-inline > div.thumbnail:nth-child("+ str(counter_current) +") > div[class="+"'thumbnail-description dropdown-menu-wrapper'"+"] > div > a"
 
-        # AGUARDA A SÉRIE FICAR VISÍVEL NA PÁGINA
+        # WAIT THE CURRENT SERIE BE AVALIABLE IN THE PAGE
         selenium.wait_element(selector)
 
-        # ENCONTRA A SÉRIE
+        # FINDS CURRENT SERIE
         selenium.find_element(selector)
 
-        # COLETA O NOME DA SÉRIE E SALVA NA LISTA
+        # STORE THE NAME OF SERIE AND SAVE IT IN THE LIST
         list_all_titles_movies_saved.append(selenium.extract_text(selector))
         
-        # CONDICIONAL PARA A LÓGICA DO LOOP
+        # CONDITION FOR THE LOOP'S LOGIC
         counter_current = counter_current + 1
 
     try:
-        # VERIFICA SE EXITE O LINK "NEXT"
+        # FIND THE "NEXT" LINK IN THE BOTTOM PAGE
         selector = "div.pagination > a[rel="+"next"+"]"
         selenium.find_element(selector)
-        # DEFINE link_next_page COMO True PARA VALIDAÇÃO POSTERIOR
+        # DEFINE link_next_page AS True FOR POSTERIOR AVALIATION
         link_next_page = True
     except:
-        # DEFINE link_next_page COMO False PARA VALIDAÇÃO POSTERIOR
+        # DEFINE link_next_page AS False FOR POSTERIOR AVALIATION
         link_next_page = False
 
-    # CASO EXISTA LINK "NEXT" NA PÁGINA
+    # IF EXISTS "NEXT" LINK IN THE PAGE
     if (link_next_page == True):
-        # CLICA NO LINK "NEXT"
+        # CLICK IN THE "NEXT" LINK
         selenium.click_element(selector)
 
-# DEFINE O CABEÇALHO DO ARQUIVO DE EXPORTAÇÃO .CSV
+# DEFINE THE HEADER OF FILE'S EXPORT .CSV
 custom.save_csv('data.csv', 'w', ["Nome da série"])
 
-# EXPORTA A LISTA DE SÉRIES PARA O ARQUIVO .CSV
+# EXPORTS THE SERIES LIST FOR THE FILE .CSV
 custom.save_csv('data.csv', 'a', custom.serie_list_handling(list_all_titles_movies_saved))
 
+# CLOSE THE BROWSER
 selenium.stop_browser()
