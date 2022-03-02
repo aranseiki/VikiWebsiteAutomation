@@ -1,7 +1,7 @@
-import os
-import datetime as dt
 import lib.selenium_utils as selenium
 import lib.python_functions_utils as custom
+import os
+import datetime as dt
 from time import sleep
 
 try:
@@ -25,6 +25,7 @@ try:
         csv_file_name = 'series_list_exported.csv'
         log_name = 'log_'+current_date+'.txt'
         log_file = log_path + log_name
+        csv_file = export_path + csv_file_name
 
         custom.create_directory(root_path)
         custom.create_directory(current_day_path)
@@ -300,11 +301,11 @@ try:
 
     try:
         # DEFINE THE HEADER OF FILE'S EXPORT .CSV
-        custom.save_csv(export_path + csv_file_name, 'w', ["Nome da série"])
+        custom.save_csv(csv_file, 'w', ["Nome da série"])
 
         # EXPORTS THE SERIES LIST FOR THE FILE .CSV
         custom.save_csv(
-            csv_file_name,
+            csv_file,
             'a',
             custom.serie_list_handling(list_all_titles_movies_saved)
         )

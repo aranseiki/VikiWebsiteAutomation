@@ -1,2 +1,5 @@
 Status,Message Execution,DateTime Initial Execution,Time Final Execution
 'OK', 'Process have been done with success.', '02/03/2022: 16:19:34', '16:33:57'
+'OK', 'Process have been done with success.', '02/03/2022: 17:58:06', '18:12:32'
+'NOK', '[Internal System Error]: Error in the process 1: Starting browser.', '02/03/2022: 18:17:28', '18:17:34'
+'OK', 'Process have been done with success.', '02/03/2022: 18:19:25', '18:33:37'
