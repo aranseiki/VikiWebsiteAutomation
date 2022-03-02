@@ -13,7 +13,7 @@ def start_browser(url):
     """
     Definition
     ----------
-    Starts the Firefox browser and open it with an URL. 
+    Starts the Firefox browser and open it with an URL.
     Require to inform URL parameter.
     ----------
 
@@ -26,7 +26,7 @@ def start_browser(url):
     Output
     ----------
     None
-    
+
     """
     global browser
     browser = Firefox()
@@ -39,7 +39,7 @@ def wait_page_loaded():
     Definition
     ----------
     Waits the current webpage in context be totally fulled.
-    
+
     ----------
 
     Parameters
@@ -51,7 +51,7 @@ def wait_page_loaded():
     Output
     ----------
     None
-    
+
     """
     done_state = False
     while done_state == False:
@@ -69,7 +69,7 @@ def back_page():
     Definition
     ----------
     Back the navigation for earlierly webpage accessed.
-    
+
     ----------
 
     Parameters
@@ -81,7 +81,7 @@ def back_page():
     Output
     ----------
     None
-    
+
     """
     browser.back()
     wait_page_loaded()
@@ -107,7 +107,7 @@ def center_element(selector):
     Output
     ----------
     None
-    
+
     """
     browser.execute_script(
         'document.querySelector("' + selector
@@ -140,7 +140,7 @@ def wait_element(selector, time=30):
     Output
     ----------
     None
-    
+
     """
     try:
         wait = WebDriverWait(browser, time)
@@ -175,7 +175,7 @@ def find_very_elements(selector):
     Output
     ----------
     None
-    
+
     """
     browser.find_elements(By.CSS_SELECTOR, selector)
     center_element(selector)
@@ -202,7 +202,7 @@ def find_element(selector):
     Output
     ----------
     None
-    
+
     """
     browser.find_elements(By.CSS_SELECTOR, selector)
     center_element(selector)
@@ -229,7 +229,7 @@ def counter_elements(selector):
     Output
     ----------
     None
-    
+
     """
     elements = browser.find_elements(By.CSS_SELECTOR, selector)
     center_element(selector)
@@ -256,7 +256,7 @@ def extract_text(selector):
     Output
     ----------
     None
-    
+
     """
     element = browser.find_element(By.CSS_SELECTOR, selector)
     text_element = element.text
@@ -285,7 +285,7 @@ def click_element(selector):
     Output
     ----------
     None
-    
+
     """
     try:
         center_element(selector)
@@ -317,7 +317,7 @@ def write_in_element(selector, text):
     Output
     ----------
     None
-    
+
     """
     center_element(selector)
     element = browser.find_element(By.CSS_SELECTOR, selector)
@@ -338,7 +338,8 @@ def mouse_click(webelement):
     ----------
     webelement : WebDriver
         A webelement of the type WebDriver of Selenium library. \n
-        Example: \n\t\t browser.find_element(By.XPATH("//input[@value='submit']"))
+        Example: \n\t\t browser.find_element(\
+            By.XPATH("//input[@value='submit']"))
 
 
     ----------
@@ -346,7 +347,7 @@ def mouse_click(webelement):
     Output
     ----------
     None
-    
+
     """
     action = ActionChains(browser)
     action.double_click(webelement).perform()
@@ -369,6 +370,6 @@ def stop_browser():
     Output
     ----------
     None
-    
+
     """
     browser.close()

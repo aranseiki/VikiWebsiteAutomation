@@ -12,7 +12,7 @@ def cls():
     Definition
     ----------
     Clear the terminal history.
-    
+
     ----------
 
     Parameters
@@ -24,7 +24,7 @@ def cls():
     Output
     ----------
     None
-    
+
     """
     os.system('cls')
 
@@ -45,14 +45,15 @@ def create_directory(path):
             name of the folder to be created. \n
         Example: \n\t\t 'C:\\Projects\\AutomationTests' \n\t
         In this example, the path to create the folder is \
-            'C:\\Projects\\', where the folder to be created is AutomationTests.
+            'C:\\Projects\\', \
+                where the folder to be created is AutomationTests.
 
     ----------
 
     Output
     ----------
     None
-    
+
     """
     if not os.path.exists(path):
         os.mkdir(path)
@@ -72,10 +73,11 @@ def save_csv(file, mode, content):
     * file: str \n
         Path where the file will be created, including the \
             name of the file to be handled. \n
-        Example: \n\t\t 'C:\\Projects\\AutomationTests\export.csv' \n\t
+        Example: \n\t\t 'C:\\Projects\\AutomationTests\\export.csv' \n\t
         In this example, the path to create the file is \
-            'C:\\Projects\\AutomationTests', where the file to be created is export.csv.
-    
+            'C:\\Projects\\AutomationTests', \
+                where the file to be created is export.csv.
+
     * mode: str \n
         Indicates how to the file will be handled. \n
             ‘r’     Read        Open a file for read only \n\t\t
@@ -84,22 +86,24 @@ def save_csv(file, mode, content):
             ‘r+’    Read+Write  open a file for both reading and writing \n\t\t
             ‘x’     Create      Create a new file \n\t\t
         Example: \n\t\t 'w' \n\t
-        In this example, the mode to create the file is write, overwriting the content before. \
-    
+        In this example, the mode to create the file is \
+            write, overwriting the content before. \
+
     * content: list \n
         List of string for to extract to .csv file.
         Example: \n\t\t ['apple', 'orange', 'Strawberry']
-        
+
     ----------
 
     Output
     ----------
     None
-    
+
     """
     handled_file = open(file, mode, encoding='utf8')
     writer = csv.writer(handled_file)
     writer.writerow(content)
+    handled_file.close()
 
 
 def handling_attachment(content_attachment):
@@ -117,14 +121,14 @@ def handling_attachment(content_attachment):
     * content_attachment: list \n
         List of string. \n
         Example: \n\t\t ['apple', 'orange', 'Strawberry']
-           
+
     ----------
 
     Output
     ----------
     Returns a string with the content of list concatenated \
         without special characters.
-    
+
     """
     content_attachment = str(
         content_attachment
@@ -140,7 +144,8 @@ def send_email_outlook(address_from, password, address_to, message):
     Definition
     ----------
     Sends e-mail from Microsoft Outlook server. \n
-    Requires to inform address_from, password, address_to, and message parameters.
+    Requires to inform address_from, password, \
+        address_to, and message parameters.
 
     ----------
 
@@ -148,7 +153,8 @@ def send_email_outlook(address_from, password, address_to, message):
     ----------
     * address_from: str \n
         String to indicate the e-mail address that will be send from. \
-            Also indicates the address that will be make logon in the e-mail server. \n
+            Also indicates the address that will be \
+                make logon in the e-mail server. \n
             Example: \n\t\t 'First name and last name <alias_from@domain.com>'
 
     * password: str \n
@@ -162,7 +168,7 @@ def send_email_outlook(address_from, password, address_to, message):
 
     * message: str \n
         String to indicate the content of e-mail that will be sent. \n
-            Example: \n\t\t 
+            Example: \n\t\t
                 '''From: {}
                     To: {}
                     Subject: {}
@@ -173,13 +179,14 @@ def send_email_outlook(address_from, password, address_to, message):
 
                 '''
         In this example, a structure formated for to concatenate string and \
-            variable, defining the variable spaces by "{}". This also accepts attachment.
+            variable, defining the variable spaces by "{}". \
+                This also accepts attachment.
     ----------
 
     Output
     ----------
     None
-    
+
     """
     login = address_from.split('<')[1].replace('>', '')
     server = smtplib.SMTP('smtp.office365.com')
@@ -207,14 +214,14 @@ def serie_list_handling(list_param):
     * list_param: list \n
         List of string. \n
         Example: \n\t\t ['apple', 'orange', 'Strawberry']
-           
+
     ----------
 
     Output
     ----------
     Returns a string with the content of list concatenated \
         without special characters.
-    
+
     """
     return str(list_param)\
         .replace("', \'", ', ')\
@@ -225,6 +232,8 @@ def serie_list_handling(list_param):
         .replace('\\n', "', '")\
         .replace("']", '')\
         .replace('"]', "")\
+        .replace("['", '')\
+        .replace('["', "")\
         .replace('"', "'")\
         .replace('"', "")\
         .replace('""', "")\
