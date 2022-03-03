@@ -21,7 +21,7 @@ As prerequisite for executing the script is necessary have installed the Firefox
   To install the Mozilla Firefox browser follow the steps in this link:
 
   [How to install Firefox on Windows | Firefox Help (mozilla.org)](https://support.mozilla.org/en-US/kb/how-install-firefox-windows)
-* ###### Windows PowerShell 5.1:
+* ###### Windows PowerShell:
 
   Windows PowerShell comes installed by default in every Windows, starting with Windows 7 SP1 and Windows Server 2008 R2 SP1.
   To check the version of Windows PowerShell, search it in Windows menu and type the follow command inside Windows PowerShell:
