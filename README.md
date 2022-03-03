@@ -2,7 +2,7 @@
 
 This project aims at automation on the series streaming website Viki.com. Coded with Python and Selenium.
 
-In this automation, the goal is extract the names of korean series published by Viki platform. For this, is need do login on Viki website and filter the series list by "TV" in format, "Korea" in country and "Popular-all time" in order list. Done this filter so, is possible to extract the names of series in the current page, and doing this until not exist more next page for enter in.In this automation, the goal is extract the series name from Korea published by Viki platform. For this, is need do login on Viki and filter the series list by "TV" in format, "Korea" in Country and "Popular-all time" in order list. Done this filter so, is possible to extract the name series in the current page, and doing this until not exist more next page for enter in.
+In this automation, the goal is extract the names of korean series published by Viki platform. For this, is need do login on Viki website and filter the series list by "TV" in format, "Korea" in country and "Popular-all time" in order list. Done this filter so, is possible to extract the names of series in the current page, and doing this until not exist more next page for enter in.
 
 # Pré-requisitos
 
