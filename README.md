@@ -28,7 +28,7 @@ As prerequisite for executing the script is necessary have installed the Firefox
 
   ``$Host``
 
-  This command display some informations about the current instance of terminal. Check the version and see if it is equal or superior to informed in this project:
+  This command display some informations about the current instance of terminal. Check the version and see if it is equal or superior to informed in this project. If not, follow the steps in this link:
 
   [Installing Windows PowerShell - PowerShell | Microsoft Docs
   ](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/install/installing-windows-powershell?view=powershell-5.1)
