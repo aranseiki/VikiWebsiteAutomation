@@ -4,7 +4,7 @@ This project aims at automation on the series streaming website Viki.com. Coded 
 
 In this automation, the goal is extract the names of korean series published by Viki platform. For this, is need do login on Viki website and filter the series list by "TV" in format, "Korea" in country and "Popular-all time" in order list. Done this filter so, is possible to extract the names of series in the current page, and doing this until not exist more next page for enter in.
 
-# Pré-requisitos
+# Prerequisite
 
 As prerequisite for executing the script is necessary have installed the Firefox browser in latest version and others technologies mentioned below:
 
