@@ -95,6 +95,8 @@ try:
         usuario_viki = os.environ['usuario_viki']
         senha_viki = os.environ['senha_viki']
 
+        exit(0)
+
         selector = 'li.hide-on-small:nth-child(4) > a:nth-child(1)'
         web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
         web_utils.clicar_elemento(seletor=selector, tipo_elemento='css_selector')
