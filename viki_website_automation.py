@@ -1,8 +1,44 @@
-import lib.selenium_utils as selenium
 import lib.python_functions_utils as custom
 import os
 import datetime as dt
 from time import sleep
+from py_rpautom import (
+    desktop_utils as desktop_utils,
+    web_utils as web_utils,
+    python_utils as pyutils,
+)
+import os
+
+
+os.environ['WDM_SSL_VERIFY'] = '0'
+os.environ['WDM_LOG_LEVEL'] = '0'
+
+cls = pyutils.cls
+
+try:
+    env_porta_webdriver = os.environ['EnvPortaWebdriver']
+    env_porta_webdriver = (
+        env_porta_webdriver
+            .replace('"', '')
+            .replace("'", '')
+            .strip()
+        )
+except Exception as erro:
+    env_porta_webdriver = 8080
+
+lista_argumentos = (
+    '--start-maximized',
+    '--disable-logging',
+    '--log-level=3',
+    '--output=/dev/null',
+    '--enable-gpu-debugging=false',
+    '--enable-gpu-driver-debug-logging=false',
+    '--disable-gl-error-limit',
+)
+navegador = False
+nome_navegador = ''
+usuario_viki = ''
+senha_viki = ''
 
 try:
     try:
@@ -41,7 +77,12 @@ try:
     try:
         # OPEN THE BROWSE WITH A URL
         url = "https://www.viki.com/"
-        selenium.start_browser(url)
+        web_utils.iniciar_navegador(
+            nome_navegador='edge',
+            url=url,
+            porta=int(env_porta_webdriver),
+            options=lista_argumentos,
+        )
     except:
         if message_error == '':
             message_error = TypeError(
@@ -51,27 +92,30 @@ try:
 
     try:
         # ACCESS THE LOGIN PAGE
+        usuario_viki = os.environ['usuario_viki']
+        senha_viki = os.environ['senha_viki']
+
         selector = 'li.hide-on-small:nth-child(4) > a:nth-child(1)'
-        selenium.find_element(selector)
-        selenium.click_element(selector)
+        web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+        web_utils.clicar_elemento(seletor=selector, tipo_elemento='css_selector')
 
         # INSERT THE E-MAIL
-        selector = "input[type="+"email"+"]"
-        selenium.find_element(selector)
-        selenium.write_in_element(selector, input('Type your e-mail: '))
+        selector = "input[type=email]"
+        web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+        web_utils.escrever_em_elemento(seletor=selector, texto=usuario_viki)
 
         # INSERT THE PASSWORD
-        selector = "input[type="+"password"+"]"
-        selenium.find_element(selector)
-        selenium.write_in_element(selector, input('Type your password: '))
+        selector = "input[type=password]"
+        web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+        web_utils.escrever_em_elemento(seletor=selector, texto=senha_viki)
 
         # CLEAR THE TERMINAL FOR SECURITY
         custom.cls()
 
         # CLICK ON THE "LOGIN" BUTTON
         selector = 'form > button'
-        selenium.find_element(selector)
-        selenium.click_element(selector)
+        web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+        web_utils.clicar_elemento(seletor=selector)
     except:
         if message_error == '':
             message_error = TypeError(
@@ -80,11 +124,11 @@ try:
         raise message_error
 
     try:
+        # breakpoint()
         # CLICK IN "EXPLORER" LINK ON TOP OF MENU HORIZONTAL
-        selector = "a[href="+"'/explore'"+"]"
-        selenium.wait_element(selector)
-        selenium.find_element(selector)
-        selenium.click_element(selector)
+        selector = "a[href='/explore']"
+        web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+        web_utils.clicar_elemento(seletor=selector)
 
         # INITIALIZE THE VARIABLES FOR LOGIC
         current_format_selection = ''
@@ -93,20 +137,19 @@ try:
         while tentatives <= maximum_tentatives:
             # SHOW ALL TV SERIES FORMATS
             selector = 'div#s2id_type > a > span.select2-arrow > b'
-            selenium.find_element(selector)
-            selenium.click_element(selector)
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+            web_utils.clicar_elemento(seletor=selector)
 
             # DEFINE "TV" OPTION AS SERIE FORMAT SELECTIONED
             selector = "div#select2-drop > \
-                ul[role="+"listbox"+"] > li:nth-child(2)"
-            selenium.wait_element(selector)
-            selenium.find_element(selector)
-            selenium.click_element(selector)
+                ul[role=listbox] > li:nth-child(2)"
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+            web_utils.clicar_elemento(seletor=selector)
             sleep(3)
 
             # STORE THE SELECTIONED REGION
             selector = 'div#s2id_type > a > span#select2-chosen-12'
-            current_format_selection = selenium.extract_text(selector)
+            current_format_selection = web_utils.extrair_texto(seletor=selector)
 
             # CONDITION FOR THE LOOP'S LOGIC
             tentatives = tentatives + 1
@@ -133,24 +176,23 @@ try:
         while tentatives <= maximum_tentatives:
             # SHOW ALL ORIGIN'S COUNTRY OPTIONS
             selector = 'div#s2id_country > a > span.select2-arrow > b'
-            selenium.find_element(selector)
-            selenium.click_element(selector)
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+            web_utils.clicar_elemento(seletor=selector)
 
             # DEFINE THE COUNTRY OPTION AS KOREA
             selector = "div#select2-drop > ul > \
-                li[role="+"presentation"+"] > ul.select2-result-sub > \
-                li[role="+"presentation"+"]:nth-child(2) > \
-                div[class="+"select2-result-label"+"]"
-            selenium.wait_element(selector)
-            selenium.find_element(selector)
-            selenium.click_element(selector)
+                li[role=presentation] > ul.select2-result-sub > \
+                li[role=presentation]:nth-child(2) > \
+                div[class=select2-result-label]"
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+            web_utils.clicar_elemento(seletor=selector)
             sleep(3)
 
             # STORE THE SELECTIONED REGION
             selector = "div#s2id_country > \
-                a[class="+"select2-choice"+"] > \
-                span[class="+"select2-chosen"+"]"
-            current_country_selection = selenium.extract_text(selector)
+                a[class=select2-choice] > \
+                span[class=select2-chosen]"
+            current_country_selection = web_utils.extrair_texto(seletor=selector)
 
             # CONDITION FOR THE LOOP'S LOGIC
             tentatives = tentatives + 1
@@ -178,21 +220,19 @@ try:
             # SHOW ALL SERIES ORDER OPTIONS
             selector = 'div.explore-sort-items > \
                 div > a > span:nth-child(2) > i'
-            selenium.wait_element(selector)
-            selenium.find_element(selector)
-            selenium.click_element(selector)
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+            web_utils.clicar_elemento(seletor=selector)
 
             # DEFINE THE SELECTIONED SERIES ORDER AS "POPULAR-ALL TIME"
             selector = 'div.explore-sort-items > \
                 div > ul > li:nth-child(1) > a'
-            selenium.wait_element(selector)
-            selenium.find_element(selector)
-            selenium.click_element(selector)
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
+            web_utils.clicar_elemento(seletor=selector)
             sleep(3)
 
             # STORE THE SELECTIONED SERIES ORDER
             selector = "div.explore-sort-items > div > a > span:nth-child(2)"
-            current_order_selection = selenium.extract_text(selector)
+            current_order_selection = web_utils.extrair_texto(seletor=selector)
 
             # CONDITION FOR THE LOOP'S LOGIC
             tentatives = tentatives + 1
@@ -231,7 +271,7 @@ try:
             try:
                 # ASSERT THAT EXISTS THE FIRST SERIE IN THE AVALIABLE ON PAGE
                 selector = 'div.row-inline > div.thumbnail:nth-child(1)'
-                selenium.wait_element(selector)
+                web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
                 # DEFINE wait_element AS True FOR POSTERIOR AVALIATION
                 wait_element = True
             except:
@@ -249,10 +289,10 @@ try:
             # WAIT THE GENERAL ELEMENT OF ELEMENT'S
             #       LIST TO BE AVALIABLE IN THE SCREEN
             selector = 'div.row-inline > div.thumbnail'
-            selenium.wait_element(selector)
+            web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
 
             # STORE THE LENGTH OF SERIES AVALIABLES IN THE PAGE
-            counter_series = selenium.counter_elements(selector)
+            counter_series = web_utils.contar_elementos(selector)
 
             # FOR EACH SERIE IN THE PAGE
             while counter_current <= counter_series:
@@ -264,14 +304,11 @@ try:
                     "] > div > a"
 
                 # WAIT THE CURRENT SERIE BE AVALIABLE IN THE PAGE
-                selenium.wait_element(selector)
-
-                # FINDS CURRENT SERIE
-                selenium.find_element(selector)
+                web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
 
                 # STORE THE NAME OF SERIE AND SAVE IT IN THE LIST
                 list_all_titles_movies_saved.append(
-                    selenium.extract_text(selector)
+                    web_utils.extrair_texto(seletor=selector)
                 )
 
                 # CONDITION FOR THE LOOP'S LOGIC
@@ -279,8 +316,8 @@ try:
 
             try:
                 # FIND THE "NEXT" LINK IN THE BOTTOM PAGE
-                selector = "div.pagination > a[rel="+"next"+"]"
-                selenium.find_element(selector)
+                selector = "div.pagination > a[rel=next]"
+                web_utils.aguardar_elemento(identificador=selector, tipo_elemento='css_selector')
                 # DEFINE link_next_page AS True FOR POSTERIOR AVALIATION
                 link_next_page = True
             except:
@@ -290,7 +327,7 @@ try:
             # IF EXISTS "NEXT" LINK IN THE PAGE
             if (link_next_page == True):
                 # CLICK IN THE "NEXT" LINK
-                selenium.click_element(selector)
+                web_utils.clicar_elemento(seletor=selector)
     except:
         if message_error == '':
             message_error = TypeError(
@@ -326,7 +363,7 @@ except:
 finally:
     try:
         # CLOSE THE BROWSER
-        selenium.stop_browser()
+        web_utils.encerrar_navegador()
         ...
     except:
         if message_error == '':
